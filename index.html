@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Mobile HSR</title>
+		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
+		<style>
+			#map-page, #map-canvas {
+				width: 100%;
+				height: 100%;
+				padding: 0;
+			}
+
+			.marker-label {
+				font-size: medium;
+				background-color: #fff;
+				white-space: nowrap;
+			}
+		</style>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/init.js"></script>
+		<script src="js/jquery.mobile-1.4.5.min.js"></script>
+		<script src="js/nav.js"></script>
+		<script	src="js/map.js"></script>
+		<script src="js/hsr.js"></script>
+		<script src="js/timer.js"></script>
+		<script src="js/app.js"></script>
+		<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
+		<script src="js/markerwithlabel_packed.js"></script>
+	</head>
+	<body>
+		<div data-role="page" id="map-page">
+			<div data-role="panel" data-display="overlay" class="menu_nav" data-position-fixed="true">
+				<ul data-role="listview" class="nav-menu">
+					<li data-role="list-divider" class="menu_view_type">Mobile HSR Map</li>
+					<li><a href="http://www.hamilton.ca/CityServices/Transit/CurrentSchedules/" class="ui-icon-th-list" target="_blank">HSR Current Schedules</a></li>
+					<li><a href="javascript:void(0)" class="menu_about ui-icon-info">About</a></li>
+				</ul>
+			</div><!-- /menu	-->
+			<div class="page_header" data-role="header" data-tap-toggle="false" data-position="fixed">
+				<a href="javascript:void(0)" data-role="button" data-inline="true" data-icon="bars" data-iconpos="notext" class="ui-btn-left menu_toggle"></a>
+				<span class="ui-title">Last Update <span id="timer"></span>s</span>
+			</div><!-- /header	-->
+			<div role="main" class="ui-content" id="map-canvas">
+				<!-- map loads here... -->
+			</div>
+			<div data-role="popup" id="about" data-dismissible="false" data-overlay-theme="b">
+				<div data-role="header">
+					<h1>About</h1>
+				</div><!-- /header	-->
+				<div data-role="content" class="form_center">
+					<div style="margin:0 auto;margin-left:auto;margin-right:auto;align:center;text-align:center;">
+						<p style="font-size:smaller;">Comments or Suggestions?</p>
+						<p style="font-size:small;">Email steve@veerman.ca</p>
+						<p style="font-size:x-small;">Created by <a href="http://steve.veerman.ca" target="_blank">Steve Veerman</a></p>
+					</div>
+					<a href="javascript:void(0)" data-role="button" data-icon="check" class="close_popup">Close</a>
+				</div><!-- /content	-->
+			</div><!-- /popup	-->
+		</div><!-- /page -->
+	</body>
+	<script>
+	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	  ga('create', 'UA-24658326-8', 'auto');
+	  ga('send', 'pageview');
+	</script>
+</html>
