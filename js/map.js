@@ -22,7 +22,7 @@ function appMap(params){
 
 	self.drawMap = function(params){
 		var map_params = {
-			zoom: 16,
+			zoom: 15,
 			center: params.latlng,
 			disableDefaultUI: true,
 			panControl: false,

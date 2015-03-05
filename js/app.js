@@ -13,6 +13,8 @@ function init(){
 		'timer': new appTimer({'id': '#timer'})
 	};
 
+	document.title = 'hsrmap.ca - Mobile HSR Map';
+
 	app.map.createMap(function(){
 		app.hsr.followVehiclePositions(function(data){
 			app.hsr.getVehiclePositions(function(data){

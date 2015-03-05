@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Mobile HSR</title>
+		<title>hsrmap.ca - Mobile HSR Map</title>
 		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
 		<style>
 			#map-page, #map-canvas {
@@ -16,6 +16,15 @@
 				font-size: medium;
 				background-color: #fff;
 				white-space: nowrap;
+			}
+
+			.form_center{
+				margin: 0 auto;
+				margin-left: auto;
+				margin-right: auto;
+				align: center;
+				text-align: center;
+				width:300px;
 			}
 		</style>
 		<script src="js/jquery.min.js"></script>
@@ -33,9 +42,12 @@
 		<div data-role="page" id="map-page">
 			<div data-role="panel" data-display="overlay" class="menu_nav" data-position-fixed="true">
 				<ul data-role="listview" class="nav-menu">
-					<li data-role="list-divider" class="menu_view_type">Mobile HSR Map</li>
-					<li><a href="http://www.hamilton.ca/CityServices/Transit/CurrentSchedules/" class="ui-icon-th-list" target="_blank">HSR Current Schedules</a></li>
+					<li data-role="list-divider">Mobile HSR Map</li>
+					<li><a href="http://www.hamilton.ca/CityServices/Transit/CurrentSchedules/" class="ui-icon-clock" target="_blank">HSR Current Schedules</a></li>
 					<li><a href="javascript:void(0)" class="menu_about ui-icon-info">About</a></li>
+					<li data-role="list-divider">Other Apps</li>
+					<li><a href="http://realtime-hsr.cloudapp.net/" class="ui-icon-th-list" target="_blank">Realtime HSR</a></li>
+					<li><a href="http://www.busweb.hamilton.ca:8008/hiwire?.a=iRealTimeDisplay" class="ui-icon-th-list" target="_blank">HSR's Bus Web</a></li>
 				</ul>
 			</div><!-- /menu	-->
 			<div class="page_header" data-role="header" data-tap-toggle="false" data-position="fixed">
@@ -51,8 +63,8 @@
 				</div><!-- /header	-->
 				<div data-role="content" class="form_center">
 					<div style="margin:0 auto;margin-left:auto;margin-right:auto;align:center;text-align:center;">
-						<p style="font-size:smaller;">Comments or Suggestions?</p>
-						<p style="font-size:small;">Email steve@veerman.ca</p>
+						<p style="font-size:smaller;">Suggestions?</p>
+						<p><a href="https://twitter.com/veerman" class="twitter-follow-button" data-show-count="false">Follow @veerman</a></p>
 						<p style="font-size:x-small;">Created by <a href="http://steve.veerman.ca" target="_blank">Steve Veerman</a></p>
 					</div>
 					<a href="javascript:void(0)" data-role="button" data-icon="check" class="close_popup">Close</a>
@@ -69,4 +81,5 @@
 	  ga('create', 'UA-24658326-8', 'auto');
 	  ga('send', 'pageview');
 	</script>
+	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 </html>
