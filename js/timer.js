@@ -3,7 +3,7 @@ function appTimer(params){
 
 	self.add = function(){
     self.seconds++;
-    var label = self.seconds > 9 ? self.seconds : '0' + self.seconds;    
+    var label = self.seconds > 9 ? self.seconds : '0' + self.seconds;
     self.$label.html(label);
     self.time();
 	}
@@ -24,7 +24,7 @@ function appTimer(params){
 		self.seconds = 0;
 		self.$label.html('00');
 	}
-	
+
 	self.reset = function(){
 		self.stop();
 		self.clear();

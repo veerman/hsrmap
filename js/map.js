@@ -2,8 +2,10 @@ function appMap(params){
 	var self = this;
 
 	self.createMap = function(callback){
-		var defaultLatLng = new google.maps.LatLng(43.255586, -79.873151); // hamilton city hall
+		var defaultLatLng = new google.maps.LatLng(self.lat, self.lng);
 
+		self.drawMap({'callback': callback, 'latlng': defaultLatLng}); // No geolocation support, show default map
+		/*
 		if (navigator.geolocation){
 			function success(pos){
 				self.drawMap({'callback': callback, 'latlng': new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude)});
@@ -18,11 +20,12 @@ function appMap(params){
 		}else{
 			self.drawMap({'callback': callback, 'latlng': defaultLatLng}); // No geolocation support, show default map
 		}
+		//*/
 	}
 
 	self.drawMap = function(params){
 		var map_params = {
-			zoom: 15,
+			zoom: 14,
 			center: params.latlng,
 			disableDefaultUI: true,
 			panControl: false,
@@ -34,7 +37,7 @@ function appMap(params){
 		};
 		map_params = $.extend({}, map_params, params.map_params);
 
-		self.map = new google.maps.Map(document.getElementById("map-canvas"), map_params);
+		self.map = new google.maps.Map(document.getElementById('map-canvas'), map_params);
 		self.infowindow = new google.maps.InfoWindow();
 
 		google.maps.event.addListenerOnce(self.map, 'idle', params.callback);
@@ -70,43 +73,52 @@ function appMap(params){
 		else{
 			self.clearMarker({'marker_id': marker_id});
 			self.markers[marker_id] = new MarkerWithLabel(marker_params);
+			//self.markers[marker_id] = new google.maps.Marker(marker_params);
+			google.maps.event.addListener(self.markers[marker_id], 'click', params.onclick_callback);
+			google.maps.event.addListener(self.infowindow, 'closeclick', function(){
+			   self.clearRoutes();
+			});
 		}
+	}
 
-		google.maps.event.addListener(self.markers[marker_id], 'click', params.onclick_callback);
-		google.maps.event.addListener(self.infowindow, 'closeclick', function(){
-		   self.clearRoutes();
-		});
+	self.getLabelPosition = function(params){
+		var radians = (90 + params.rotation) * (3.14159/180);
+		var label = {'width': self.label.width, 'height': self.label.height}; //22,20
+		var origin = {'lat': (self.label.width/2), 'lng': (self.label.height/2)}; // center label on point
+		var r = self.label.radius;
+		x = origin.lng - r * Math.cos(radians);
+		y = origin.lat - r * Math.sin(radians);
+		return {'x': x, 'y': y};
 	}
 
 	self.moveMarker = function(params){ // marker_id, from, to, index
-		var limit = 20;
+		var limit = 5;
 		var lat = params.from.position.lat() + (params.index / limit) * (params.to.position.lat() - params.from.position.lat());
 		var lng = params.from.position.lng() + (params.index / limit) * (params.to.position.lng() - params.from.position.lng());
 
-		var rotation_difference = params.to.rotation - params.from.rotation;
-		if (rotation_difference < 0){ // is negative, counter-clockwise
-			cw = 360 + rotation_difference;
-			ccw = rotation_difference;
-		}
-		else{ // is positive, clockwise
-			cw = rotation_difference;
-			ccw = 360 - rotation_difference;
-		}
-		var rotation_degrees = Math.abs(cw) > Math.abs(ccw) ? ccw : cw;
+		var rotation_degrees = params.to.rotation - params.from.rotation;
+		var rotation_sign = rotation_degrees ? (rotation_degrees < 0 ? -1 : 1) : 0;
+		var rotation_abs = Math.abs(rotation_degrees);
+		if (rotation_abs > 180) // if rotation is greater than 180, use opposite rotation
+			rotation_degrees = (-1 * rotation_sign) * (360 - rotation_abs);
 		var rotation = params.from.rotation + (params.index / limit) * (rotation_degrees);
-		var icon = jQuery.extend({}, self.markers[params.marker_id].icon);;
 
+		var icon = jQuery.extend({}, self.markers[params.marker_id].icon);
 		icon.rotation = rotation;
 		icon.fillColor = '#f8cf09';
 		if (params.index === limit)
 			icon.fillColor = '#fff';
+
+		var labelPos = self.getLabelPosition({'rotation':rotation});
+		self.markers[params.marker_id].set('labelAnchor', new google.maps.Point(labelPos.x,labelPos.y));
+
 		self.markers[params.marker_id].setIcon(icon);
 		self.markers[params.marker_id].setPosition(new google.maps.LatLng(lat, lng));
 	  if (params.index < limit){ // call the next "frame" of the animation
 	  	params.index++;
 	    setTimeout(function(){
 	      self.moveMarker(params);
-	    }, (self.moveMarker_time / limit)); // 25 seconds split over 100 frames
+	    }, (self.moveMarker_interval / limit)); // 25 seconds split over 100 frames
 	  }
 	}
 
@@ -141,9 +153,12 @@ function appMap(params){
 	self.init = function(params){
 		console.log('init ' + self.constructor.name);
 
+		self.lat = params.lat;
+		self.lng = params.lng;
 		self.map = null;
 		self.markers = {};
 		self.routes = {}
-		self.moveMarker_time = 15000;
+		self.moveMarker_interval = params.moveMarker_interval; //5000;
+		self.label = params.label;
 	}(params);
 }

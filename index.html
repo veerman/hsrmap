@@ -3,6 +3,12 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content="http://hsrmap.ca" />
+		<meta property="og:image" content="http://hsrmap.ca/images/bus_wide.jpg" />
+		<meta property="og:title" content="Mobile HSR Map - Live Bus Tracker" />
+		<meta property="og:site_name" content="hsrmap.ca" />
+		<meta property="fb:admins" content="58016494" />
 		<title>hsrmap.ca - Mobile HSR Map</title>
 		<link rel="stylesheet" href="css/jquery.mobile-1.4.5.min.css">
 		<style>
@@ -13,9 +19,13 @@
 			}
 
 			.marker-label {
-				font-size: medium;
-				background-color: #fff;
+				font-size: small;
 				white-space: nowrap;
+				width: 18px;
+				text-align: center;
+				border-radius: 30%;				
+				/*border: 1px solid #0255a0;*/
+				/*background-color: #fff;*/
 			}
 
 			.form_center{
@@ -32,7 +42,7 @@
 		<script src="js/jquery.mobile-1.4.5.min.js"></script>
 		<script src="js/nav.js"></script>
 		<script	src="js/map.js"></script>
-		<script src="js/hsr.js"></script>
+		<script src="js/bus.js"></script>
 		<script src="js/timer.js"></script>
 		<script src="js/app.js"></script>
 		<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
@@ -45,9 +55,9 @@
 					<li data-role="list-divider">Mobile HSR Map</li>
 					<li><a href="http://www.hamilton.ca/CityServices/Transit/CurrentSchedules/" class="ui-icon-clock" target="_blank">HSR Current Schedules</a></li>
 					<li><a href="javascript:void(0)" class="menu_about ui-icon-info">About</a></li>
-					<li data-role="list-divider">Other Apps</li>
-					<li><a href="http://realtime-hsr.cloudapp.net/" class="ui-icon-th-list" target="_blank">Realtime HSR</a></li>
-					<li><a href="http://www.busweb.hamilton.ca:8008/hiwire?.a=iRealTimeDisplay" class="ui-icon-th-list" target="_blank">HSR's Bus Web</a></li>
+					<li data-role="list-divider">Other Apps (links)</li>
+					<li><a href="http://realtime-hsr.cloudapp.net/" class="ui-icon-cloud" target="_blank">Realtime HSR</a></li>
+					<li><a href="http://www.busweb.hamilton.ca:8008/hiwire?.a=iRealTimeDisplay" class="ui-icon-cloud" target="_blank">HSR's Bus Web</a></li>
 				</ul>
 			</div><!-- /menu	-->
 			<div class="page_header" data-role="header" data-tap-toggle="false" data-position="fixed">
