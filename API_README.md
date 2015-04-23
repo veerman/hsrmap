@@ -1,8 +1,10 @@
 ## API Readme
 
+All endpoints accept callback parameter for JSONP requests.
+
 ### gtfs.php?method=vehiclepositions
 
-Also has experimental vehicle_history parameter to return previously stored vehicle locations eg. &vehicle_history=3
+Return latest vehicle position. Also has experimental vehicle_history parameter to return previously stored vehicle locations eg. &vehicle_history=3
 
 Example Result
 ```
@@ -37,6 +39,8 @@ Example Result
 ```
 
 ### gtfs.php?method=tripupdates
+
+Return trip updates (stop updates).
 
 Example Result
 ```
@@ -101,7 +105,7 @@ Example Result
 
 ### http://hsrmap.ca/service.php?method=GetListOfLines
 
-Return all lines
+Return all lines.
 
 Example Result
 ```
@@ -137,12 +141,43 @@ Example Result
 
 ### http://hsrmap.ca/service.php?method=GetLineTrace&lineDirId=29380
 
+Return lineDirId route/trace points to plot on map.
+
 Example Result
 ```
+
+[
+	{
+		loncenter: -79.8446325,
+		latcenter: 43.243153,
+		lonwest: -79.943134,
+		loneast: -79.746131,
+		latnorth: 43.263338,
+		latsouth: 43.222968,
+		points: [
+			[
+				{
+					lon: -79.8684,
+					lat: 43.252444
+				},
+				{
+					lon: -79.868347,
+					lat: 43.25242
+				},
+				{
+					lon: -79.765457,
+					lat: 43.22865
+				}
+			]
+		]
+	}
+]
 
 ```
 
 ### http://hsrmap.ca/service.php?method=GetStopsForLine&lineDirId=29380,29381
+
+Return stops for specific lineDirIds.
 
 Example Result
 ```
@@ -190,13 +225,71 @@ Example Result
 
 ### http://hsrmap.ca/service.php?method=GetTravelPoints&lineDirId=29380
 
+Experimental alternative to gtfs.php?method=vehiclepositions
+
+Return latest vehicle position.
+
 Example Result
 ```
 
 {
-	version: "1.1",
-	result: {
-		travelPoints: [ ]
+	254: {
+		block_id: 415843,
+		escha: -110,
+		lfm: false,
+		route_dir_id: 29760,
+		route_id: 2976,
+		pattern_id: 18912,
+		trip_id: 956713,
+		vehicle_number: "411",
+		bearing: 251.56505117708,
+		lat: 43.262533,
+		lng: -79.891436,
+		time: 36426,
+		estimated_points: [
+			{
+				bearing: 251.56505117708,
+				lat: 43.262533,
+				lng: -79.891436,
+				time: 36426
+			},
+			{
+				bearing: 251.56505117708,
+				lat: 43.262518,
+				lng: -79.891501,
+				time: 36427
+			}
+		],
+		scheduled_points: [ ]
+	},
+	256: {
+		block_id: 415836,
+		escha: -496,
+		lfm: false,
+		route_dir_id: 29760,
+		route_id: 2976,
+		pattern_id: 18909,
+		trip_id: 956731,
+		vehicle_number: "413",
+		bearing: 280.81783358484,
+		lat: 43.265895,
+		lng: -79.952388,
+		time: 36426,
+		estimated_points: [
+			{
+				bearing: 280.81783358484,
+				lat: 43.265895,
+				lng: -79.952388,
+				time: 36426
+			},
+			{
+				bearing: 280.81783358484,
+				lat: 43.265907,
+				lng: -79.952473,
+				time: 36427
+			}
+		],
+		scheduled_points: [ ]
 	}
 }
 

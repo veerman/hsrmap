@@ -57,17 +57,6 @@ function appBus(params){
 	}
 
 	self.getVehiclePositionsService = function(callback){
-		// data examples
-		/*
-		var travelPointsReqs = [{'lineDirId': 29420}, {'lineDirId': 29421}];
-		$.ajax({
-		  type: 'GET',
-		  url: 'service.php',
-		  data: {'version':'1.1','method':'GetTravelPoints','params':{'travelPointsReqs': travelPointsReqs,'interval':2}}, // {'travelPointsReqs':[{'lineDirId':'29420','callingApp':'RMD'}],'interval':10}
-			contentType: 'application/json; charset=UTF-8',
-			dataType: 'json'
-		})
-		//*/
 		$.ajax({
 		  type: 'GET',
 		  url: 'service.php',
