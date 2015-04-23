@@ -5,7 +5,10 @@ A simple Hamilton Street Railway (HSR) live transit mobile experience. See it in
 [Steve Veerman](http://steve.veerman.ca/)
 
 ## About
-I'm generally not a fan of bus schedules as I'd rather see the bus I want to catch on a map and simply hop on. If you like catching the bus the same way, this app is for you.
+I am generally not a fan of bus schedules. I would rather see a visual representation of a bus location on a map, time my walk to the closest stop, and simply hop on my chosen bus. If you like catching the bus the same way, this app is for you. For more information on the creation of hsrmap, visit this [Software Hamilton article](http://www.softwarehamilton.com/2015/04/17/interview-with-steve-veerman-about-hsrmap/)
+
+## API
+See the API_README.md
 
 ## Requirements
 * PHP with composer
@@ -14,5 +17,5 @@ I'm generally not a fan of bus schedules as I'd rather see the bus I want to cat
 * In root, run: composer install
 
 ## Notes
-* live data isn't actually live, it's about 1 minute behind, so adjust accordingly
-* if you click on the bus marker, you will see the route
+* Live data is not actually live. It is about 45-75 seconds minute behind, so adjust accordingly.
+* If you click on the bus marker, you will see the route drawn.

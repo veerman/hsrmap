@@ -4,8 +4,24 @@ require_once 'vendor/autoload.php';
 
 use transit_realtime\FeedMessage;
 
+define('GTFS_VehiclePositions_url', 'http://opendata.hamilton.ca/GTFS-RT/GTFS_VehiclePositions.pb');
+define('GTFS_TripUpdates_url', 'http://opendata.hamilton.ca/GTFS-RT/GTFS_TripUpdates.pb');
+define('GTFS_ServiceAlerts_url', 'http://opendata.hamilton.ca/GTFS-RT/GTFS_ServiceAlerts.pb');
+
+$dbs = array(
+	'hsrmap_dev' => array('host' => 'localhost', 'user' => 'hsr', 'password' => 'password', 'name' => 'hsrmap')
+);
+$dbs_key = 'hsrmap';
+
+$link = mysqli_connect($dbs[$dbs_key]['host'], $dbs[$dbs_key]['user'], $dbs[$dbs_key]['password'], $dbs[$dbs_key]['name']);
+
+$use_db = true;
+if (mysqli_connect_errno()){
+	$use_db = false;
+}
+
 function getVehiclePositions(){
-	$data = file_get_contents("http://opendata.hamilton.ca/GTFS-RT/GTFS_VehiclePositions.pb");
+	$data = file_get_contents(GTFS_VehiclePositions_url);
 	$feed = new FeedMessage();
 	$feed->parse($data);
 
@@ -67,7 +83,7 @@ function getVehiclePositions(){
 }
 
 function getTripUpdates(){
-	$data = file_get_contents("http://opendata.hamilton.ca/GTFS-RT/GTFS_TripUpdates.pb");
+	$data = file_get_contents(GTFS_TripUpdates_url);
 	$feed = new FeedMessage();
 	$feed->parse($data);
 
@@ -132,7 +148,7 @@ function getTripUpdates(){
 }
 
 function getServiceAlerts(){
-	$data = file_get_contents("http://opendata.hamilton.ca/GTFS-RT/GTFS_ServiceAlerts.pb");
+	$data = file_get_contents(GTFS_ServiceAlerts_url);
 	$feed = new FeedMessage();
 	$feed->parse($data);
 
@@ -168,7 +184,47 @@ function echoJSON($object, $callback){
 
 switch (strtolower($_REQUEST['method'])) {
 	case 'vehiclepositions':
-		$result = getVehiclePositions();
+		$current_positions = getVehiclePositions();
+
+		if ($use_db){
+			$vehicle_history = intval($_REQUEST['vehicle_history']);
+			if ($vehicle_history <= 0)
+				$vehicle_history = 0; // set default history to return
+			if ($vehicle_history > 10)
+				$vehicle_history = 10; // sex maximum
+
+			// grab historical vehicle positions (previous)
+			$sql = "SELECT `data`,`date_created` FROM `vehiclepositions` ORDER BY `date_created` DESC LIMIT ".$vehicle_history;
+			$sql_result =  mysqli_query($link, $sql) or die("Error: ".mysqli_error($link));
+			$historical_data = array();
+			$previous_md5 = '';
+			while($row = mysqli_fetch_assoc($sql_result)){
+				$date_created = $row['date_created'];
+				if (empty($previous_md5)) // save the most recent (first) md5 of content to determine if we should save or discard current_positions
+					$previous_md5 = hash('md5', $row['data']);
+				$historical_data[$date_created] = json_decode($row['data'], true);
+			}
+			mysqli_free_result($sql_result);
+
+			$current_positions_json = json_encode($current_positions);
+
+			if (hash('md5', $current_positions_json) !== $previous_md5){ // current is different than previous, save it
+				// save latest data
+				$sql = "INSERT INTO `vehiclepositions` (`data`,`date_created`) VALUES ('".mysqli_real_escape_string($link, $current_positions_json)."', NOW())";
+				mysqli_query($link, $sql) or die("Error: ".mysqli_error($link));
+			}
+			else{
+				array_shift($historical_data); // remove first element as it is a duplicate of current positions
+			}
+
+			foreach($current_positions as $current_key => $current_position){ // merge historical data with current positions
+				foreach($historical_data as $historical_key => $historical_datum){
+					$current_positions[$current_key]['previous'][$historical_key] = $historical_datum[$current_key];
+				}
+			}
+		}
+
+		$result = $current_positions;
 		break;
 	case 'tripupdates':
 		$result = getTripUpdates();
@@ -179,5 +235,9 @@ switch (strtolower($_REQUEST['method'])) {
 }
 
 echoJSON($result, $_REQUEST['callback']);
+
+if ($use_db){
+	mysqli_close($link);
+}
 
 ?>
