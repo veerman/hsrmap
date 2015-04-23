@@ -1,24 +1,10 @@
 <?php
 
+include 'settings.php';
+
 require_once 'vendor/autoload.php';
 
 use transit_realtime\FeedMessage;
-
-define('GTFS_VehiclePositions_url', 'http://opendata.hamilton.ca/GTFS-RT/GTFS_VehiclePositions.pb');
-define('GTFS_TripUpdates_url', 'http://opendata.hamilton.ca/GTFS-RT/GTFS_TripUpdates.pb');
-define('GTFS_ServiceAlerts_url', 'http://opendata.hamilton.ca/GTFS-RT/GTFS_ServiceAlerts.pb');
-
-$dbs = array(
-	'hsrmap_dev' => array('host' => 'localhost', 'user' => 'hsr', 'password' => 'password', 'name' => 'hsrmap')
-);
-$dbs_key = 'hsrmap';
-
-$link = mysqli_connect($dbs[$dbs_key]['host'], $dbs[$dbs_key]['user'], $dbs[$dbs_key]['password'], $dbs[$dbs_key]['name']);
-
-$use_db = true;
-if (mysqli_connect_errno()){
-	$use_db = false;
-}
 
 function getVehiclePositions(){
 	$data = file_get_contents(GTFS_VehiclePositions_url);
@@ -185,6 +171,14 @@ function echoJSON($object, $callback){
 switch (strtolower($_REQUEST['method'])) {
 	case 'vehiclepositions':
 		$current_positions = getVehiclePositions();
+
+		$use_db = true;
+		if ($use_db){
+			$link = mysqli_connect($dbs[$dbs_key]['host'], $dbs[$dbs_key]['user'], $dbs[$dbs_key]['password'], $dbs[$dbs_key]['name']);
+			if (mysqli_connect_errno()){
+				$use_db = false;
+			}
+		}
 
 		if ($use_db){
 			$vehicle_history = intval($_REQUEST['vehicle_history']);

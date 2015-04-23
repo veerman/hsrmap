@@ -1,3 +1,17 @@
+<?
+
+include 'settings.php';
+
+unset($city['service_url']); // remove service url
+
+$app_settings = array(
+	'city' => $city,
+	'vehiclepositions_api' => $city['abbr'] === 'hamilton' ? (empty($_REQUEST['api']) ? 'gtfs' : $_REQUEST['api']) : 'service',
+	'vehiclepositions_interval' => 20000, // how often to request new vehicle data (in ms)
+	'moveMarker_interval' => 15000 // how long an animation should take to complete (in ms)
+);
+
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -23,7 +37,7 @@
 				white-space: nowrap;
 				width: 18px;
 				text-align: center;
-				border-radius: 30%;				
+				border-radius: 30%;
 				/*border: 1px solid #0255a0;*/
 				/*background-color: #fff;*/
 			}
@@ -37,6 +51,9 @@
 				width:300px;
 			}
 		</style>
+		<script>
+			var app_settings = <?=json_encode($app_settings) ?>;
+		</script>
 		<script src="js/jquery.min.js"></script>
 		<script src="js/init.js"></script>
 		<script src="js/jquery.mobile-1.4.5.min.js"></script>

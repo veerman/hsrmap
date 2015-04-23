@@ -8,8 +8,8 @@ function init(){
 	console.log('init');
 	app = {
 		'nav': new appNav(),
-		'map': new appMap({'lat': 43.255586, 'lng': -79.873151, 'moveMarker_interval': 15000, 'label':{'width':16,'height':20,'radius':6}}), // hamilton city hall, 22, 20
-		'bus': new appBus({'service_url': 'www.busweb.hamilton.ca', 'api': 'gtfs', 'vehiclepositions_interval': 20000}), // service/gtfs
+		'map': new appMap({'lat': app_settings.city.lat, 'lng': app_settings.city.lng, 'moveMarker_interval': app_settings.moveMarker_interval, 'label':{'width':16,'height':20,'radius':6}}),
+		'bus': new appBus({'city': app_settings.city.abbr, 'vehiclepositions_api': app_settings.vehiclepositions_api, 'vehiclepositions_interval': app_settings.vehiclepositions_interval}),
 		'timer': new appTimer({'id': '#timer'})
 	};
 
@@ -67,7 +67,7 @@ function init(){
 									//'anchor': new google.maps.Point(0, 0),
 									//'scaledSize': new google.maps.Size(25, 25)
 								},
-								'labelContent': app.bus.routes_info[val.route_id].abbr,
+								'labelContent': app.bus.routes_info[val.route_id] !== undefined ? app.bus.routes_info[val.route_id].abbr : '',
 								'labelAnchor': new google.maps.Point(labelPos.x,labelPos.y), // x-values increase to the right and y-values increase to the top.
 								//'labelAnchor': new google.maps.Point(10, -10), // x-values increase to the right and y-values increase to the top.
 								'labelClass': 'marker-label'
@@ -75,24 +75,31 @@ function init(){
 						});
 						params.onclick_callback = function(){
 							var route_info = app.bus.routes_info[params.route_id];
-							var content = [
-								'<p>Route: ' + route_info.abbr + '</p>',
-								'<p>Name: ' + route_info.name + '</p>',
-								(params.route_dir_id !== undefined ? '<p>Direction: ' + route_info.drinfos[params.route_dir_id].dirname + '</p>' : ''),
-								'<p>Bus ID: ' + this.id + '</p>',
-								(params.speed !== undefined && params.speed > 0 ? '<p>Speed: ' + (params.speed * 1.60934).toFixed(1) + 'km/h</p>' : '')
-							].join('');
+							var content = '';
+							if (route_info !== undefined){
+								content = [
+									'<p>Route: ' + route_info.abbr + '</p>',
+									'<p>Name: ' + route_info.name + '</p>',
+									(params.route_dir_id !== undefined ? '<p>Direction: ' + route_info.drinfos[params.route_dir_id].dirname + '</p>' : ''),
+									'<p>Bus ID: ' + this.id + '</p>',
+									(params.speed !== undefined && params.speed > 0 ? '<p>Speed: ' + (params.speed * 1.60934).toFixed(1) + 'km/h</p>' : '')
+								].join('');
+							}
 							app.map.infowindow.setContent(app.map.createInfoWindowHTML({'content':content}));
 							app.map.infowindow.open(app.map.map, this);
 							app.bus.getRoutePath(params.route_id + '0', function(route0){ // grab both directions of route to form loop
 								app.bus.getRoutePath(params.route_id + '1', function(route1){
 									var routes = [];
-									$.each(route0[0].points, function(key, val){ // each points is a collection of lines
-										routes.push(val); // add collection to routes
-									});
-									$.each(route1[0].points, function(key, val){ // each points is a collection of lines
-										routes.push(val); // add collection to routes
-									});
+									if (route0[0] !== undefined){
+										$.each(route0[0].points, function(key, val){ // each points is a collection of lines
+											routes.push(val); // add collection to routes
+										});
+									}
+									if (route1[0] !== undefined){
+										$.each(route1[0].points, function(key, val){ // each points is a collection of lines
+											routes.push(val); // add collection to routes
+										});
+									}
 									app.map.clearRoutes(); // remove previous route path from map
 									$.each(routes, function(key1, val1){ // for each collection of lines
 										var pts = [];

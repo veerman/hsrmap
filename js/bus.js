@@ -5,7 +5,7 @@ function appBus(params){
 		$.ajax({
 		  type: 'GET',
 		  url: 'service.php',
-		  data: {'url':self.service_url,'method':'GetListOfLines'},
+		  data: {'city':self.city,'method':'GetListOfLines'},
 			dataType: 'json'
 		})
 		.done(function(data, textStatus, jqXHR){
@@ -21,7 +21,7 @@ function appBus(params){
 		$.ajax({
 		  type: 'GET',
 		  url: 'service.php',
-		  data: {'url':self.service_url,'method':'GetLineTrace','lineDirId':route},
+		  data: {'city':self.city,'method':'GetLineTrace','lineDirId':route},
 			dataType: 'json'
 		})
 		.done(function(data, textStatus, jqXHR){
@@ -36,7 +36,7 @@ function appBus(params){
 		$.ajax({
 		  type: 'GET',
 		  url: 'service.php',
-		  data: {'url':self.service_url,'method':'GetStopsForLine','lineDirId':route},
+		  data: {'city':self.city,'method':'GetStopsForLine','lineDirId':route},
 			dataType: 'json'
 		})
 		.done(function(data, textStatus, jqXHR){
@@ -48,7 +48,7 @@ function appBus(params){
 	}
 
 	self.getVehiclePositions = function(callback){
-		if (self.api === 'gtfs'){
+		if (self.vehiclepositions_api === 'gtfs'){
 			self.getVehiclePositionsGTFS(callback);
 		}
 		else{
@@ -60,7 +60,7 @@ function appBus(params){
 		$.ajax({
 		  type: 'GET',
 		  url: 'service.php',
-		  data: {'url':self.service_url,'method':'GetTravelPoints'},
+		  data: {'city':self.city,'method':'GetTravelPoints'},
 			dataType: 'json'
 		})
 		.done(function(data, textStatus, jqXHR){
@@ -112,8 +112,8 @@ function appBus(params){
 	self.init = function(params){
 		console.log('init ' + self.constructor.name);
 
-		self.service_url = params.service_url;
-		self.api = params.api;
+		self.city = params.city;
+		self.vehiclepositions_api = params.vehiclepositions_api;
 		self.vehiclepositions = {};
 		self.vehiclepositions_interval = params.vehiclepositions_interval; // 10000
 	}(params);
