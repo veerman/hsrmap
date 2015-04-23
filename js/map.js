@@ -92,7 +92,7 @@ function appMap(params){
 	}
 
 	self.moveMarker = function(params){ // marker_id, from, to, index
-		var limit = 5;
+		var limit = 15;
 		var lat = params.from.position.lat() + (params.index / limit) * (params.to.position.lat() - params.from.position.lat());
 		var lng = params.from.position.lng() + (params.index / limit) * (params.to.position.lng() - params.from.position.lng());
 

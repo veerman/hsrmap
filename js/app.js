@@ -9,7 +9,7 @@ function init(){
 	app = {
 		'nav': new appNav(),
 		'map': new appMap({'lat': 43.255586, 'lng': -79.873151, 'moveMarker_interval': 15000, 'label':{'width':16,'height':20,'radius':6}}), // hamilton city hall, 22, 20
-		'bus': new appBus({'service_url': 'www.busweb.hamilton.ca', 'api': 'gtfs', 'vehiclepositions_interval': 10000}), // service/gtfs
+		'bus': new appBus({'service_url': 'www.busweb.hamilton.ca', 'api': 'gtfs', 'vehiclepositions_interval': 20000}), // service/gtfs
 		'timer': new appTimer({'id': '#timer'})
 	};
 
