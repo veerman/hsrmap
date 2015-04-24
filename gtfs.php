@@ -6,8 +6,8 @@ require_once 'vendor/autoload.php';
 
 use transit_realtime\FeedMessage;
 
-function getVehiclePositions(){
-	$data = file_get_contents(GTFS_VehiclePositions_url);
+function getVehiclePositions($GTFS_VehiclePositions_url){
+	$data = file_get_contents($GTFS_VehiclePositions_url);
 	$feed = new FeedMessage();
 	$feed->parse($data);
 
@@ -68,8 +68,8 @@ function getVehiclePositions(){
 	return $results;
 }
 
-function getTripUpdates(){
-	$data = file_get_contents(GTFS_TripUpdates_url);
+function getTripUpdates($GTFS_TripUpdates_url){
+	$data = file_get_contents($GTFS_TripUpdates_url);
 	$feed = new FeedMessage();
 	$feed->parse($data);
 
@@ -133,8 +133,8 @@ function getTripUpdates(){
 	return $results;
 }
 
-function getServiceAlerts(){
-	$data = file_get_contents(GTFS_ServiceAlerts_url);
+function getServiceAlerts($GTFS_ServiceAlerts_url){
+	$data = file_get_contents($GTFS_ServiceAlerts_url);
 	$feed = new FeedMessage();
 	$feed->parse($data);
 
@@ -170,7 +170,7 @@ function echoJSON($object, $callback){
 
 switch (strtolower($_REQUEST['method'])) {
 	case 'vehiclepositions':
-		$current_positions = getVehiclePositions();
+		$current_positions = getVehiclePositions($city['GTFS_VehiclePositions_url']);
 
 		$use_db = true;
 		if ($use_db){
@@ -221,10 +221,10 @@ switch (strtolower($_REQUEST['method'])) {
 		$result = $current_positions;
 		break;
 	case 'tripupdates':
-		$result = getTripUpdates();
+		$result = getTripUpdates($city['GTFS_TripUpdates_url']);
 		break;
 	case 'servicealerts':
-		$result = getServiceAlerts();
+		$result = getServiceAlerts($city['GTFS_ServiceAlerts_url']);
 		break;
 }
 

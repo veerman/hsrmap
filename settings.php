@@ -14,6 +14,9 @@ $cities = array(
 		'name' => 'Hamilton, Ontario',
 		'lat' => 43.255586, // 43.253793
 		'lng' => -79.873151, // -79.746993
+		'GTFS_VehiclePositions_url' => 'http://opendata.hamilton.ca/GTFS-RT/GTFS_VehiclePositions.pb',
+		'GTFS_TripUpdates_url' => 'http://opendata.hamilton.ca/GTFS-RT/GTFS_TripUpdates.pb',
+		'GTFS_ServiceAlerts_url' => 'http://opendata.hamilton.ca/GTFS-RT/GTFS_ServiceAlerts.pb'
 	)
 );
 
